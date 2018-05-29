@@ -32,8 +32,8 @@ Resources:
                 httpMethod: POST
                 type: aws_proxy
                 uri:
-                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ChargeStripeAccount.Arn}/invocations
-  ChargeStripeAccount:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateStripeCharge.Arn}/invocations
+  CreateStripeCharge:
     Type: AWS::Serverless::Function
     Properties:
       Handler: index.handler
