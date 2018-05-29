@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  CorsOrigin:
+    Type: String
+    Default: ''
+    Description: (Optional) Cross-origin resource sharing (CORS) Origin. You can specify a single origin, all "*" or leave empty and no CORS will be applied.
+    MaxLength: 250
+  StripeSecretKey:
+    Type: String
+    Default: ''
+    Description: (Required) Your Stripe account Secret API Key. Please be careful not to expose publicly this key.
+    MinLength: 3
+    MaxLength: 250
+Conditions:
+  IsCorsDefined: !Not [!Equals [!Ref CorsOrigin, '']]
+Resources:
+  ChargeStripeApiWebhook:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      DefinitionBody:
+        swagger: 2.0
+        info:
+          title:
+            Ref: AWS::StackName
+        paths:
+          /charge:
+            post:
+              responses: {}
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ChargeStripeAccount.Arn}/invocations
+  ChargeStripeAccount:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs8.10
+      Environment:
+        Variables:
+          IS_CORS: IsCorsDefined
+          CORS_ORIGIN: !Ref CorsOrigin
+          STRIPE_SECRET_KEY: !Ref StripeSecretKey
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /charge
+            Method: POST
+            RestApiId: !Ref ChargeStripeApiWebhook
+Outputs:
+  ApiUrl:
+    Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/prod/charge
+    Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to make a charge based on its token.
