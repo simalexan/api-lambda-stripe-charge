@@ -1,5 +1,4 @@
 const AWS = require('aws-sdk'),
-    stripe = require('stripe'),
     qs = require('querystring'),
     processResponse = require('./process-response'),
     stripe = require('stripe')(process.env.STRIPE_SECRET_KEY),

@@ -5,13 +5,16 @@
   "main": "index.js",
   "scripts": {
     "package": "aws cloudformation package --template-file template.yaml --output-template-file output.yaml --s3-bucket api-lambda-stripe-charge-bucket",
-    "deploy": "aws cloudformation deploy --template-file output.yaml --stack-name api-lambda-stripe-charge --capabilities CAPABILITY_IAM --parameter-overrides StripeSecretKey=$npm_package_config_stripe_secret_key",
+    "deploy": "aws cloudformation deploy --template-file output.yaml --stack-name api-lambda-stripe-charge --capabilities CAPABILITY_IAM --parameter-overrides StripeSecretKey=$npm_package_config_secret_key",
     "qd": "npm run package && npm run deploy"
   },
   "config": {
-    "stripe_secret_key": "your-stripe-key"
+    "secret_key": "sk_test_VhfvkqbpbaYE2qjYP2zCxVyp"
   },
   "keywords": [],
   "author": "Aleksandar Simovic <alexander.simovic@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "stripe": "^6.0.0"
+  }
 }

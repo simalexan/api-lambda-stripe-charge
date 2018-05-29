@@ -8,7 +8,6 @@ Parameters:
     MaxLength: 250
   StripeSecretKey:
     Type: String
-    Default: ''
     Description: (Required) Your Stripe account Secret API Key. Please be careful not to expose publicly this key.
     MinLength: 3
     MaxLength: 250
