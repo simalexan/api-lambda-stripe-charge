@@ -9,7 +9,7 @@
     "qd": "npm run package && npm run deploy"
   },
   "config": {
-    "secret_key": "sk_test_VhfvkqbpbaYE2qjYP2zCxVyp"
+    "secret_key": "your-stripe-key"
   },
   "keywords": [],
   "author": "Aleksandar Simovic <alexander.simovic@gmail.com>",
