@@ -37,6 +37,7 @@ Resources:
     Properties:
       Handler: index.handler
       Runtime: nodejs8.10
+      Timeout: 10
       Environment:
         Variables:
           IS_CORS: IsCorsDefined

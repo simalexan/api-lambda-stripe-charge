@@ -7,7 +7,7 @@ const AWS = require('aws-sdk'),
 exports.handler = (event) => {
     if (event.httpMethod === 'OPTIONS') {
 		return Promise.resolve(processResponse(IS_CORS));
-	}
+    }
     if (!event.body) {
         return Promise.resolve(processResponse(IS_CORS, 'invalid', 400));
     }
@@ -22,9 +22,9 @@ exports.handler = (event) => {
 		currency: newCharge.currency,
 		description: 'Charge Description'
     })
-    .then(charge => processResponse(IS_CORS, {charge}))
+    .then(charge => processResponse(IS_CORS, {createdCharge: charge}))
     .catch((err) => {
         console.log(err);
-        return processResponse(IS_CORS, 'stripe-error', 500);
+        return processResponse(IS_CORS, {err}, 500);
 	});
 };

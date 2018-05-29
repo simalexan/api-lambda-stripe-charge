@@ -8,7 +8,7 @@ module.exports = (isCors, body, requestedCode) => {
     } : {};
     return {
         statusCode: code,
-        body: body || '',
+        body: JSON.stringify(body) || '',
         headers: headers
     };
 };
