@@ -1,15 +1,15 @@
 {
-  "name": "api-lambda-stripe-payment",
+  "name": "api-lambda-stripe-charge",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "package": "aws cloudformation package --template-file template.yaml --output-template-file output.yaml --s3-bucket api-lambda-stripe-payment-bucket",
-    "deploy": "aws cloudformation deploy --template-file output.yaml --stack-name api-lambda-stripe-payment --capabilities CAPABILITY_IAM --parameter-overrides TableName=$npm_package_config_stripe_secret_key",
+    "package": "aws cloudformation package --template-file template.yaml --output-template-file output.yaml --s3-bucket api-lambda-stripe-charge-bucket",
+    "deploy": "aws cloudformation deploy --template-file output.yaml --stack-name api-lambda-stripe-charge --capabilities CAPABILITY_IAM --parameter-overrides StripeSecretKey=$npm_package_config_stripe_secret_key",
     "qd": "npm run package && npm run deploy"
   },
   "config": {
-    "stripe_secret_key": "yourstripekey"
+    "stripe_secret_key": "your-stripe-key"
   },
   "keywords": [],
   "author": "Aleksandar Simovic <alexander.simovic@gmail.com>",

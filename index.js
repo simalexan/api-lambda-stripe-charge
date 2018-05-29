@@ -22,7 +22,8 @@ exports.handler = (event) => {
 		amount: newCharge.amount,
 		currency: newCharge.currency,
 		description: 'Charge Description'
-    }).then(charge => processResponse(IS_CORS, {charge}))
+    })
+    .then(charge => processResponse(IS_CORS, {charge}))
     .catch((err) => {
         console.log(err);
         return processResponse(IS_CORS, 'stripe-error', 500);
