@@ -12,11 +12,15 @@ exports.handler = (event) => {
     if (!event.body) {
         return Promise.resolve(processResponse(IS_CORS, 'invalid', 400));
     }
-    const body = qs.parse(event.body);
+    const newCharge = qs.parse(event.body);
+    if (!newCharge.amount || !newCharge.currency) {
+        return Promise.resolve(processResponse(IS_CORS, 'invalid arguments, please provide amount and currency fields as mentioned in the app README', 400));
+    }
+
 	return stripe.charges.create({
-		source: body.stripeToken,
-		amount: body.amount,
-		currency: body.currency,
+		source: newCharge.stripeToken,
+		amount: newCharge.amount,
+		currency: newCharge.currency,
 		description: 'Charge Description'
     }).then(charge => processResponse(IS_CORS, {charge}))
     .catch((err) => {
