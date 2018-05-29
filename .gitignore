@@ -1,4 +1,4 @@
-.node_modules
+node_modules
 npm_debug.log
 .vscode
 .DS_Store
