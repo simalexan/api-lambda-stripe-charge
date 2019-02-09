@@ -1,10 +1,11 @@
 
 ## API Gateway -> Lambda -> Stripe Charge Payment (Checkout)
 
-#### Description
+## Description
+
 This is a Lambda function that charges a Stripe account based on the API Gateway request data. Supports CORS. Written in Node.js. It's a Nuts & Bolts application component for AWS Serverless Application Repository.
 
-#### Requirements (Setup)
+## Requirements (Setup)
 
 1. Create a Stripe account
 2. Get your Stripe API Keys (both public and secret)
@@ -20,3 +21,11 @@ aws ssm put-parameter --name /lambda-stripe-charge/stripe-secret-key --value tes
 6. Extend your form with hidden input HTML elements for **amount** and **currency**. Those fields you will need to populate with the values chosen by the user. If not familiar with that approach I recommend this StackOverflow post - [https://stackoverflow.com/questions/37798593/stripe-checkout-how-to-pass-a-value-through-to-webhook](https://stackoverflow.com/questions/37798593/stripe-checkout-how-to-pass-a-value-through-to-webhook)
 
 Will provide a video link on YouTube soon, as I will stream using this AWS App Repo template.
+
+### Latest Release - 2.0.0
+
+Added a few fixes regarding datatable naming:
+
+- Replaced Stripe Secret Key environment variable with AWS SSM SecureString Parameter - much safer
+- Add `SSMParameterPrefix` as the Input Parameter for the SSM Prefix
+- Added an AllowedPattern Constraint for the value of the `SSMParameterPrefix`
