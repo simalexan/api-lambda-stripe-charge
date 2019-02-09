@@ -11,6 +11,7 @@ Parameters:
     Description: (Required) Your Stripe account Secret API Key. Please be careful not to expose publicly this key.
     MinLength: 3
     MaxLength: 250
+    NoEcho: true
 Conditions:
   IsCorsDefined: !Not [!Equals [!Ref CorsOrigin, '']]
 Resources:
