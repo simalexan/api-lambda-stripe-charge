@@ -2,7 +2,7 @@ const AWS = require('aws-sdk'),
   ssm = new AWS.SSM(),
   qs = require('querystring'),
   processResponse = require('./process-response'),
-  STRIPE_SECRET_KEY_NAME = `${process.env.SSM_PARAMETER_PREFIX}/stripe_secret_key`,
+  STRIPE_SECRET_KEY_NAME = `${process.env.SSM_PARAMETER_PREFIX}/stripe-secret-key`,
   IS_CORS = true;
 
 exports.handler = (event) => {
@@ -17,10 +17,10 @@ exports.handler = (event) => {
     return Promise.resolve(processResponse(IS_CORS, 'invalid arguments, please provide amount and currency fields as mentioned in the app README', 400));
   }
 
-  return ssm.getParameter({ Name: STRIPE_SECRET_KEY_NAME, WithDecryption: true })
-    .then(paramResult => {
-      const STRIPE_SECRET_KEY_VALUE = paramResult[STRIPE_SECRET_KEY_NAME];
-      const stripe = require('stripe')(STRIPE_SECRET_KEY_VALUE);
+  return ssm.getParameter({ Name: STRIPE_SECRET_KEY_NAME, WithDecryption: true }).promise()
+    .then(response => {
+      const stripeSecretKeyValue = response.Parameter.Value;
+      const stripe = require('stripe')(stripeSecretKeyValue);
 
       return stripe.charges.create({
         source: newCharge.stripeToken,
