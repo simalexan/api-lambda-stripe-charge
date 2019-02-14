@@ -41,6 +41,9 @@ Resources:
       Handler: index.handler
       Runtime: nodejs8.10
       Timeout: 10
+      Policies:
+        - SNSCrudPolicy:
+            TopicName: !GetAtt SNSTopic.TopicName
       Environment:
         Variables:
           IS_CORS: IsCorsDefined
@@ -53,7 +56,12 @@ Resources:
             Path: /charge
             Method: POST
             RestApiId: !Ref ChargeStripeApiWebhook
+  SNSTopic:
+    Type: AWS::SNS::Topic
 Outputs:
   ApiUrl:
     Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/prod/charge
     Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to make a charge based on its token.
+  SNSTopic:
+    Value: !Ref SNSTopic
+    Description: The SNS topic your Stripe Lambda is notifying to
