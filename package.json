@@ -4,14 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest --color",
+    "prepack": "npm test && npm install --production",
     "package": "aws cloudformation package --template-file template.yaml --output-template-file output.yaml --s3-bucket app-repo-components",
     "deploy": "aws cloudformation deploy --template-file output.yaml --stack-name api-lambda-stripe-charge --capabilities CAPABILITY_IAM --parameter-overrides SSMParameterPrefix=/lambda-stripe-charge",
-    "qd": "npm run package && npm run deploy"
+    "qd": "npm run prepack && npm run package && npm run deploy"
   },
   "keywords": [],
   "author": "Aleksandar Simovic <alexander.simovic@gmail.com>",
   "license": "MIT",
+  "jest": {
+    "roots": [
+      "<rootDir>/src/",
+      "<rootDir>/tests/"
+    ]
+  },
   "dependencies": {
     "stripe": "^6.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.1.0"
   }
 }

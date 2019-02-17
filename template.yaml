@@ -49,6 +49,7 @@ Resources:
           IS_CORS: IsCorsDefined
           CORS_ORIGIN: !Ref CorsOrigin
           SSM_PARAMETER_PREFIX: !Ref SSMParameterPrefix
+          TOPIC_ARN: !Ref SNSTopic
       Events:
         Api:
           Type: Api
