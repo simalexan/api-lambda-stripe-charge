@@ -44,11 +44,17 @@ Resources:
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt SNSTopic.TopicName
+        - Statement:
+            Effect: Allow
+            Action:
+              - ssm:GetParameters
+            Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SSMParameterPrefix}/*
       Environment:
         Variables:
           IS_CORS: IsCorsDefined
           CORS_ORIGIN: !Ref CorsOrigin
           SSM_PARAMETER_PREFIX: !Ref SSMParameterPrefix
+          TOPIC_ARN: !Ref SNSTopic
       Events:
         Api:
           Type: Api
