@@ -1,6 +1,5 @@
 const AWS = require('aws-sdk'),
   ssm = new AWS.SSM(),
-  qs = require('querystring'),
   processResponse = require('./src/process-response'),
   chargeCustomer = require('./src/charge-customer'),
   STRIPE_SECRET_KEY_NAME = `/${process.env.SSM_PARAMETER_PREFIX}/stripe-secret-key`,
