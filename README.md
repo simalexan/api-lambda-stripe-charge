@@ -12,7 +12,7 @@ This is a Lambda function that charges a Stripe account based on the API Gateway
 3. Store your Stripe Secret Key into AWS SSM as a SecureString by running the following, but be sure to replace the `lambda-stripe-charge` with your preferred SSM prefix (though it can be just `lambda-stripe-charge`):
 
 ```ssh
-aws ssm put-parameter --name /lambda-stripe-charge/stripe-secret-key --value test-value --type SecureString --overwrite
+aws ssm put-parameter --name lambda-stripe-charge/stripe-secret-key --value test-value --type SecureString --overwrite
 ```
 
 4. Want to use Stripe's Checkout ? - [https://stripe.com/docs/checkout](https://stripe.com/docs/checkout)
