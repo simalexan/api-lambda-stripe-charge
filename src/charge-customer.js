@@ -1,14 +1,16 @@
 'use strict';
 
 const pubsubRepository = require('./pubsub-repository'),
-  paymentProcessorRepository = require('./payment-processor');
+  paymentProcessorRepository = require('./payment-processor'),
+  TOPIC_ARN = process.env.TOPIC_ARN;
 
-module.exports = function chargeCustomer(token, amount, currency, description = 'Charge Description', paymentProcessor = paymentProcessorRepository, pubsub = pubsubRepository) {
+module.exports = function chargeCustomer(secretKey, token, email, amount, currency, description = 'Charge Description', paymentProcessor = paymentProcessorRepository, pubsub = pubsubRepository) {
   let createdCharge;
 
-  return paymentProcessor.createCharge(token, amount, currency, description)
+  return paymentProcessor.createCharge(secretKey, token, amount, currency, description)
     .then(chargeResponse => {
       createdCharge = chargeResponse;
+      createdCharge.email = email;
       return pubsub.publish(createdCharge, TOPIC_ARN);
     })
     .then(() => createdCharge)
