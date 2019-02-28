@@ -1,8 +1,8 @@
 'use strict';
 
 module.exports = {
-  createCharge: function (token, amount, currency, description = 'Charge Description'){
-    const stripe = require('stripe')(token);
+  createCharge: function (stripeSecretKey, token, amount, currency, description = 'Charge Description'){
+    const stripe = require('stripe')(stripeSecretKey);
 
     return stripe.charges.create({
       source: token,
