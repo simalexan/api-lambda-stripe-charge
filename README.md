@@ -22,10 +22,9 @@ aws ssm put-parameter --name /lambda-stripe-charge/stripe-secret-key --value YOU
 
 Will provide a video link on YouTube soon, as I will stream using this AWS App Repo template.
 
-### Latest Release - 2.0.0
+### Latest Release - 3.0.0
 
 Added a few fixes regarding datatable naming:
 
-- Replaced Stripe Secret Key environment variable with AWS SSM SecureString Parameter - much safer
-- Add `SSMParameterPrefix` as the Input Parameter for the SSM Prefix
-- Added an AllowedPattern Constraint for the value of the `SSMParameterPrefix`
+- Added a SNS Topic for notifying upon successful payment
+- Fixed a few issues

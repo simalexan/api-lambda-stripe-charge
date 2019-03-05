@@ -1,17 +1,29 @@
 {
   "name": "api-lambda-stripe-charge",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest --color",
+    "prepack": "npm install --production",
     "package": "aws cloudformation package --template-file template.yaml --output-template-file output.yaml --s3-bucket app-repo-components",
-    "deploy": "aws cloudformation deploy --template-file output.yaml --stack-name api-lambda-stripe-charge --capabilities CAPABILITY_IAM --parameter-overrides SSMParameterPrefix=/lambda-stripe-charge",
-    "qd": "npm run package && npm run deploy"
+    "deploy": "aws cloudformation deploy --template-file output.yaml --stack-name api-lambda-stripe-charge --capabilities CAPABILITY_IAM --parameter-overrides SSMParameterPrefix=lambda-stripe-charge",
+    "describe": "aws cloudformation describe-stacks --stack-name api-lambda-stripe-charge --query Stacks[].Outputs[].OutputValue --output text",
+    "qd": "npm run prepack && npm run package && npm run deploy && npm run describe"
   },
   "keywords": [],
   "author": "Aleksandar Simovic <alexander.simovic@gmail.com>",
   "license": "MIT",
+  "jest": {
+    "roots": [
+      "<rootDir>/src/",
+      "<rootDir>/tests/"
+    ]
+  },
   "dependencies": {
     "stripe": "^6.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.1.0"
   }
 }

@@ -8,12 +8,12 @@ Parameters:
     MaxLength: 250
   SSMParameterPrefix:
     Type: String
-    Default: '/lambda-stripe-charge'
+    Default: 'lambda-stripe-charge'
     Description: >
       This component assumes the Stripe Secret key needed to use the Stripe Charge API is stored as SecureStrings in SSM Parameter Store under the prefix defined by
       this parameter. See the component README for details.
-    AllowedPattern: ^\/[0-9a-zA-Z-]+
-    ConstraintDescription: 'Must start with a slash "/" and then continue with alphanumeric characters'
+    AllowedPattern: ^[0-9a-zA-Z-][0-9a-zA-Z-\/]+
+    ConstraintDescription: 'Must start with alphanumeric characters (excluding a slash)'
 Conditions:
   IsCorsDefined: !Not [!Equals [!Ref CorsOrigin, '']]
 Resources:
@@ -44,11 +44,17 @@ Resources:
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt SNSTopic.TopicName
+        - Statement:
+            Effect: Allow
+            Action:
+              - ssm:GetParameter
+            Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SSMParameterPrefix}/*
       Environment:
         Variables:
           IS_CORS: IsCorsDefined
           CORS_ORIGIN: !Ref CorsOrigin
           SSM_PARAMETER_PREFIX: !Ref SSMParameterPrefix
+          TOPIC_ARN: !Ref SNSTopic
       Events:
         Api:
           Type: Api
