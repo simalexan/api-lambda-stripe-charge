@@ -22,9 +22,8 @@ aws ssm put-parameter --name /lambda-stripe-charge/stripe-secret-key --value YOU
 
 Will provide a video link on YouTube soon, as I will stream using this AWS App Repo template.
 
-### Latest Release - 3.0.0
+### Latest Release - 3.1.0
 
 Added a few fixes regarding datatable naming:
 
-- Added a SNS Topic for notifying upon successful payment
-- Fixed a few issues
+- Changed to use the SAM Policy Template for SSM Parameter Store - SSMParameterReadPolicy

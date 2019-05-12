@@ -44,11 +44,8 @@ Resources:
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt SNSTopic.TopicName
-        - Statement:
-            Effect: Allow
-            Action:
-              - ssm:GetParameter
-            Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SSMParameterPrefix}/*
+        - SSMParameterReadPolicy:
+            ParameterName: !Sub ${SSMParameterPrefix}/stripe-secret-key
       Environment:
         Variables:
           IS_CORS: IsCorsDefined
