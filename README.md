@@ -26,4 +26,4 @@ Will provide a video link on YouTube soon, as I will stream using this AWS App R
 
 Added a few fixes regarding datatable naming:
 
-- Changed to use the SAM Policy Template for SSM Parameter Store - SSMParameterReadPolicy
+- Changed to use the SAM Policy Template for SSM Parameter Store - `SSMParameterReadPolicy`
