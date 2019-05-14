@@ -80,6 +80,30 @@ Resources:
             Path: /capture
             Method: POST
             RestApiId: !Ref ChargeStripeApiWebhook
+  CreateRefund:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: refund.handler
+      Runtime: nodejs8.10
+      Timeout: 10
+      Policies:
+        - SNSCrudPolicy:
+            TopicName: !GetAtt SNSTopic.TopicName
+        - SSMParameterReadPolicy:
+            ParameterName: !Sub ${SSMParameterPrefix}/stripe-secret-key
+      Environment:
+        Variables:
+          IS_CORS: IsCorsDefined
+          CORS_ORIGIN: !Ref CorsOrigin
+          SSM_PARAMETER_PREFIX: !Ref SSMParameterPrefix
+          TOPIC_ARN: !Ref SNSTopic
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /refund
+            Method: POST
+            RestApiId: !Ref ChargeStripeApiWebhook
   SNSTopic:
     Type: AWS::SNS::Topic
 Outputs:
@@ -88,6 +112,9 @@ Outputs:
     Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to CREATE a charge based on its token.
   CaptureApiUrl:
     Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/prod/capture
+    Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to CAPTURE a charge based on its token.
+  RefundApiUrl:
+    Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/prod/refund
     Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to CAPTURE a charge based on its token.
   SNSTopic:
     Value: !Ref SNSTopic

@@ -18,5 +18,9 @@ module.exports = {
   captureCharge: async function (stripeSecretKey, charge){
     const stripe = require('stripe')(stripeSecretKey);
     return await stripe.charges.capture(charge);
+  },
+  createRefund: async function (stripeSecretKey, charge) {
+    const stripe = require('stripe')(stripeSecretKey);
+    return await stripe.refunds.create({charge});
   }
 };
