@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Parameters:
   CorsOrigin:
     Type: String
-    Default: ''
+    Default: "'*'"
     Description: (Optional) Cross-origin resource sharing (CORS) Origin. You can specify a single origin, all "*" or leave empty and no CORS will be applied.
     MaxLength: 250
   SSMParameterPrefix:
@@ -14,40 +14,23 @@ Parameters:
       this parameter. See the component README for details.
     AllowedPattern: ^[0-9a-zA-Z-][0-9a-zA-Z-\/]+
     ConstraintDescription: 'Must start with alphanumeric characters (excluding a slash)'
-  EnableCapture:
+  EnableInstantCapture:
     Type: String
     AllowedValues: [true, false]
-    Default: false
+    Default: true
     Description: To enable capturing / authorizing a payment before charging
 Conditions:
-  ShouldEnableCapture: !Equals [true, !Ref EnableCapture]
+  ShouldEnableCapture: !Equals [true, !Ref EnableInstantCapture]
 Resources:
   ChargeStripeApiWebhook:
     Type: AWS::Serverless::Api
     Properties:
       StageName: prod
-      DefinitionBody:
-        swagger: 2.0
-        info:
-          title:
-            Ref: AWS::StackName
-        paths:
-          /charge:
-            post:
-              responses: {}
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri:
-                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateStripeCharge.Arn}/invocations
-          /capture:
-            post:
-              responses: {}
-              x-amazon-apigateway-integration:
-                httpMethod: POST
-                type: aws_proxy
-                uri:
-                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CaptureStripeCharge.Arn}/invocations
+      Cors:
+        AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: !Ref CorsOrigin
+        MaxAge: "'3600'"
+        AllowMethods: "'OPTIONS,POST'"
   CreateStripeCharge:
     Type: AWS::Serverless::Function
     Properties:
@@ -65,7 +48,7 @@ Resources:
           CORS_ORIGIN: !Ref CorsOrigin
           SSM_PARAMETER_PREFIX: !Ref SSMParameterPrefix
           TOPIC_ARN: !Ref SNSTopic
-          IS_CAPTURE: !Ref EnableCapture
+          IS_CAPTURE: !Ref EnableInstantCapture
       Events:
         Api:
           Type: Api
@@ -101,10 +84,10 @@ Resources:
     Type: AWS::SNS::Topic
 Outputs:
   ChargeApiUrl:
-    Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/Prod/charge
+    Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/prod/charge
     Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to CREATE a charge based on its token.
   CaptureApiUrl:
-    Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/Prod/capture
+    Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/prod/capture
     Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to CAPTURE a charge based on its token.
   SNSTopic:
     Value: !Ref SNSTopic
