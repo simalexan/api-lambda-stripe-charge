@@ -22,8 +22,9 @@ aws ssm put-parameter --name /lambda-stripe-charge/stripe-secret-key --value YOU
 
 Will provide a video link on YouTube soon, as I will stream using this AWS App Repo template.
 
-### Latest Release - 3.1.0
+### Latest Release - 4.0.0
 
-Added a few fixes regarding datatable naming:
+A new release with a new feature to also do charge and capture of payments:
 
-- Changed to use the SAM Policy Template for SSM Parameter Store - `SSMParameterReadPolicy`
+- An additional parameter `EnableCapture` which you can set to `true` and on the `/charge` endpoint do only an authorization of a charge (to reserve funds). By default its `false`
+- An additional API endpoint `/capture` which you can call only upon an authorized charge (where you haven't immediatelly charged the customer), to actually pick up the reserved funds from the customer. It requires three parameters (`charge` - the id of the charge you want to capture and `email` - the email of the customer, useful for the SNS Topic)

@@ -14,8 +14,13 @@ Parameters:
       this parameter. See the component README for details.
     AllowedPattern: ^[0-9a-zA-Z-][0-9a-zA-Z-\/]+
     ConstraintDescription: 'Must start with alphanumeric characters (excluding a slash)'
+  EnableCapture:
+    Type: String
+    AllowedValues: [true, false]
+    Default: false
+    Description: To enable capturing / authorizing a payment before charging
 Conditions:
-  IsCorsDefined: !Not [!Equals [!Ref CorsOrigin, '']]
+  ShouldEnableCapture: !Equals [true, !Ref EnableCapture]
 Resources:
   ChargeStripeApiWebhook:
     Type: AWS::Serverless::Api
@@ -35,10 +40,43 @@ Resources:
                 type: aws_proxy
                 uri:
                   Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CreateStripeCharge.Arn}/invocations
+          /capture:
+            post:
+              responses: {}
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${CaptureStripeCharge.Arn}/invocations
   CreateStripeCharge:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: index.handler
+      Handler: charge.handler
+      Runtime: nodejs8.10
+      Timeout: 10
+      Policies:
+        - SNSCrudPolicy:
+            TopicName: !GetAtt SNSTopic.TopicName
+        - SSMParameterReadPolicy:
+            ParameterName: !Sub ${SSMParameterPrefix}/stripe-secret-key
+      Environment:
+        Variables:
+          IS_CORS: IsCorsDefined
+          CORS_ORIGIN: !Ref CorsOrigin
+          SSM_PARAMETER_PREFIX: !Ref SSMParameterPrefix
+          TOPIC_ARN: !Ref SNSTopic
+          IS_CAPTURE: !Ref EnableCapture
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /charge
+            Method: POST
+            RestApiId: !Ref ChargeStripeApiWebhook
+  CaptureStripeCharge:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: capture.handler
       Runtime: nodejs8.10
       Timeout: 10
       Policies:
@@ -56,15 +94,18 @@ Resources:
         Api:
           Type: Api
           Properties:
-            Path: /charge
+            Path: /capture
             Method: POST
             RestApiId: !Ref ChargeStripeApiWebhook
   SNSTopic:
     Type: AWS::SNS::Topic
 Outputs:
-  ApiUrl:
-    Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/prod/charge
-    Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to make a charge based on its token.
+  ChargeApiUrl:
+    Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/Prod/charge
+    Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to CREATE a charge based on its token.
+  CaptureApiUrl:
+    Value: !Sub https://${ChargeStripeApiWebhook}.execute-api.${AWS::Region}.amazonaws.com/Prod/capture
+    Description: The URL of the API Gateway you provide to Stripe as a webhook it invokes to CAPTURE a charge based on its token.
   SNSTopic:
     Value: !Ref SNSTopic
     Description: The SNS topic your Stripe Lambda is notifying to
