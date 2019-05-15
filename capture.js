@@ -13,7 +13,8 @@ exports.handler = (event) => {
   if (!event.body) {
     return Promise.resolve(processResponse(IS_CORS, 'invalid', 400));
   }
-  const captureRequest = JSON.parse(event.body);
+
+  const captureRequest = typeof event.body == 'object' ? event.body : JSON.parse(event.body);
   if (!captureRequest.chargeId) {
     return Promise.resolve(processResponse(IS_CORS, 'invalid arguments, please provide the chargeId (its ID) as mentioned in the app README', 400));
   }
