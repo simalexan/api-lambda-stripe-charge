@@ -14,14 +14,14 @@ exports.handler = (event) => {
     return Promise.resolve(processResponse(IS_CORS, 'invalid', 400));
   }
   const captureRequest = JSON.parse(event.body);
-  if (!captureRequest.charge) {
-    return Promise.resolve(processResponse(IS_CORS, 'invalid arguments, please provide the charge (its ID) as mentioned in the app README', 400));
+  if (!captureRequest.chargeId) {
+    return Promise.resolve(processResponse(IS_CORS, 'invalid arguments, please provide the chargeId (its ID) as mentioned in the app README', 400));
   }
 
   return ssm.getParameter({ Name: STRIPE_SECRET_KEY_NAME, WithDecryption: true }).promise()
     .then(response => {
       const stripeSecretKeyValue = response.Parameter.Value;
-      return captureCharge(stripeSecretKeyValue, captureRequest.charge, captureRequest.email);
+      return captureCharge(stripeSecretKeyValue, captureRequest.chargeId, captureRequest.email);
     })
     .then(capturedCharge => processResponse(IS_CORS, { capturedCharge }))
     .catch((err) => {
