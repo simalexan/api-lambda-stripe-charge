@@ -18,7 +18,7 @@ Parameters:
     Type: String
     AllowedValues: [true, false]
     Default: true
-    Description: To enable capturing / authorizing a payment before charging
+    Description: To immediatelly capture a payment upon charge, if true it means on charge you collect the amount, if false, you need to do a capture.
 Conditions:
   ShouldEnableCapture: !Equals [true, !Ref EnableInstantCapture]
 Resources:

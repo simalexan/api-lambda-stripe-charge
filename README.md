@@ -1,5 +1,5 @@
 
-## API Gateway -> Lambda -> Stripe Charge Payment (Checkout)
+# API Gateway -> Lambda -> Stripe Charge Payment (Checkout)
 
 ## Description
 
@@ -28,4 +28,4 @@ A new release with a new feature to also do charge and capture of payments:
 
 - An additional parameter `EnableCapture` which you can set to `true` and on the `/charge` endpoint do only an authorization of a charge (to reserve funds). By default its `false`
 - An additional API endpoint `/capture` which you can call only upon an authorized charge (where you haven't immediatelly charged the customer), to actually pick up the reserved funds from the customer. It requires three parameters (`charge` - the id of the charge you want to capture and `email` - the email of the customer, useful for the SNS Topic)
-- An additional API endpoint `/refund` which you can call only upon an authorized charge (where you haven't immediatelly charged the customer), to actually refund up the reserved funds from the customer. It requires three parameters (`charge` - the id of the charge you want to capture and `email` - the email of the customer, useful for the SNS Topic)
+- An additional API endpoint `/refund` which you can call only upon an authorized charge, to actually refund up the reserved / paid funds from the customer. It requires three parameters (`charge` - the id of the charge you want to refund and `email` - the email of the customer, useful for the SNS Topic)
