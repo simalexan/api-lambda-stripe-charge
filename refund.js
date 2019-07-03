@@ -2,7 +2,7 @@ const AWS = require('aws-sdk'),
   ssm = new AWS.SSM(),
   processResponse = require('./src/process-response'),
   createRefund = require('./src/create-refund'),
-  STRIPE_SECRET_KEY_NAME = `/${process.env.SSM_PARAMETER_PREFIX}/stripe-secret-key`,
+  STRIPE_SECRET_KEY_NAME = `/${process.env.SSM_PARAMETER_PATH}`,
   IS_CORS = true;
 
 exports.handler = (event) => {
