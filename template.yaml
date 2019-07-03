@@ -8,12 +8,12 @@ Parameters:
     MaxLength: 250
   SSMParameterPath:
     Type: String
-    Default: '/lambda-stripe-charge/stripe-secret-key'
+    Default: 'lambda-stripe-charge/stripe-secret-key'
     Description: >
       This component assumes the Stripe Secret key needed to use the Stripe Charge API is stored as SecureStrings in SSM Parameter Store under the path defined by
       this parameter. See the component README for details.
-    AllowedPattern: ^\/[0-9a-zA-Z-][0-9a-zA-Z-\/]+
-    ConstraintDescription: 'Must start with a slash and alphanumeric characters'
+    AllowedPattern: ^[0-9a-zA-Z-][0-9a-zA-Z-\/]+
+    ConstraintDescription: 'Must start with a slash and alphanumeric characters (exclude the starting slash)'
   EnableInstantCapture:
     Type: String
     AllowedValues: [true, false]
