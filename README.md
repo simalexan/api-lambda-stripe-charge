@@ -9,7 +9,7 @@ This is a Lambda function that charges a Stripe account based on the API Gateway
 
 1. Create a Stripe account
 2. Get your Stripe API Keys (both public and secret)
-3. Store your Stripe Secret Key into AWS SSM as a SecureString by running the following, but be sure to replace the `lambda-stripe-charge` with your preferred SSM prefix (though it can be just `lambda-stripe-charge`):
+3. Store your Stripe Secret Key into AWS SSM as a SecureString by running the following, but be sure to replace the `lambda-stripe-charge/stripe-secret-key` with your preferred SSM Parameter Path (though it can be just `lambda-stripe-charge/stripe-secret-key`):
 
 ```ssh
 aws ssm put-parameter --name /lambda-stripe-charge/stripe-secret-key --value YOUR_STRIPE_SECURE_KEY --type SecureString --overwrite
@@ -22,7 +22,13 @@ aws ssm put-parameter --name /lambda-stripe-charge/stripe-secret-key --value YOU
 
 Will provide a video link on YouTube soon, as I will stream using this AWS App Repo template.
 
-### Latest Release - 4.0.0
+### Latest Release - 4.1.0
+
+A new release with a new feature to also do charge and capture of payments:
+
+- An important change for the SSM Parameter Prefix, it has been changed to SSM Parameter Path (a full path, without the forward slash). This completely removes the dependency to the `stripe-secret-key` value. Meaning that you can now do `my-stage/some-path/another-path` or whatever you like.
+
+#### Previous Release 4.0.0
 
 A new release with a new feature to also do charge and capture of payments:
 
