@@ -25,18 +25,21 @@ Resources:
   ChargeStripeApiWebhook:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: prod
       Cors:
         AllowHeaders: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
         AllowOrigin: !Ref CorsOrigin
         MaxAge: "'3600'"
         AllowMethods: "'OPTIONS,POST'"
+      EndpointConfiguration: REGIONAL
+      StageName: prod
+      TracingEnabled: true
   CreateStripeCharge:
     Type: AWS::Serverless::Function
     Properties:
       Handler: charge.handler
       Runtime: nodejs8.10
       Timeout: 10
+      Tracing: Active
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt SNSTopic.TopicName
