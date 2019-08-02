@@ -21,9 +21,9 @@
     ]
   },
   "dependencies": {
-    "stripe": "^6.0.0"
+    "stripe": "^7.3.0"
   },
   "devDependencies": {
-    "jest": "^24.1.0"
+    "jest": "^24.8.0"
   }
 }
