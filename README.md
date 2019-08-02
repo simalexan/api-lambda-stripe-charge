@@ -22,16 +22,18 @@ aws ssm put-parameter --name /lambda-stripe-charge/stripe-secret-key --value YOU
 
 Will provide a video link on YouTube soon, as I will stream using this AWS App Repo template.
 
-### Latest Release - 4.1.0
+### Latest Release - 4.3.0
 
-A new release with a new feature to also do charge and capture of payments:
+A new release with two features:
 
-- An important change for the SSM Parameter Prefix, it has been changed to SSM Parameter Path (a full path, without the forward slash). This completely removes the dependency to the `stripe-secret-key` value. Meaning that you can now do `my-stage/some-path/another-path` or whatever you like.
+- Added Active X-Ray Tracing for the API Gateway and the Lambdas CreateStripeCharge, CreateRefund and CaptureStripeCharge
+- Added Regional Endpoints for the API Gateway, which should improve latencies
 
-#### Previous Release 4.0.0
+#### Previous Release 4.2.0
 
 A new release with a new feature to also do charge and capture of payments:
 
 - An additional parameter `EnableCapture` which you can set to `true` and on the `/charge` endpoint do only an authorization of a charge (to reserve funds). By default its `false`
 - An additional API endpoint `/capture` which you can call only upon an authorized charge (where you haven't immediatelly charged the customer), to actually pick up the reserved funds from the customer. It requires three parameters (`charge` - the id of the charge you want to capture and `email` - the email of the customer, useful for the SNS Topic)
 - An additional API endpoint `/refund` which you can call only upon an authorized charge, to actually refund up the reserved / paid funds from the customer. It requires three parameters (`charge` - the id of the charge you want to refund and `email` - the email of the customer, useful for the SNS Topic)
+- An important change for the SSM Parameter Prefix, it has been changed to SSM Parameter Path (a full path, without the forward slash). This completely removes the dependency to the `stripe-secret-key` value. Meaning that you can now do `my-stage/some-path/another-path` or whatever you like.

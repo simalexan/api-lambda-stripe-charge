@@ -65,6 +65,7 @@ Resources:
       Handler: capture.handler
       Runtime: nodejs8.10
       Timeout: 10
+      Tracing: Active
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt SNSTopic.TopicName
@@ -89,6 +90,7 @@ Resources:
       Handler: refund.handler
       Runtime: nodejs8.10
       Timeout: 10
+      Tracing: Active
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt SNSTopic.TopicName
