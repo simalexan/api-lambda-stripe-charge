@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk'),
-  captureAWS = require('aws-xray-sdk').captureAWS;
+  { captureAWS } = require('aws-xray-sdk');
 
 const captured = captureAWS(AWS);
 const sns = captured.SNS(),
