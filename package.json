@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest --color",
     "prepack": "npm install --production",
+    "prepackage": "tsc",
     "package": "aws cloudformation package --template-file template.yaml --output-template-file output.yaml --s3-bucket app-repo-components",
     "deploy": "aws cloudformation deploy --template-file output.yaml --stack-name api-lambda-stripe-charge --capabilities CAPABILITY_IAM --parameter-overrides SSMParameterPath=lambda-stripe-charge/stripe-secret-key EnableInstantCapture=false",
     "describe": "aws cloudformation describe-stacks --stack-name api-lambda-stripe-charge --query Stacks[].Outputs[].OutputValue --output text",
@@ -25,6 +26,8 @@
     "stripe": "^7.3.0"
   },
   "devDependencies": {
-    "jest": "^24.8.0"
+    "@types/node": "^8.10.38",
+    "jest": "^24.8.0",
+    "typescript": "^3.2.4"
   }
 }

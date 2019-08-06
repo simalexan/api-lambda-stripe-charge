@@ -1,7 +1,7 @@
 'use strict';
 
-import { captureAsyncFunc } from './tracing-repository';
-const CREATE_CHARGE_MESSAGE_TRACE = 'Create Charge',
+const captureAsyncFunc = require('./tracing-repository').captureAsyncFunc,
+  CREATE_CHARGE_MESSAGE_TRACE = 'Create Charge',
   CAPTURE_CHARGE_MESSAGE_TRACE = 'Capture Charge',
   CREATE_REFUND_MESSAGE_TRACE = 'Create Refund';
 

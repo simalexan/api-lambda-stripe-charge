@@ -1,5 +1,5 @@
-import AWS from 'aws-sdk';
-import { captureAWS } from 'aws-xray-sdk';
+const AWS = require('aws-sdk'),
+  captureAWS = require('aws-xray-sdk').captureAWS;
 
 const captured = captureAWS(AWS);
 const sns = captured.SNS(),
