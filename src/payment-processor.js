@@ -1,26 +1,30 @@
 'use strict';
 
+import { captureAsyncFunc } from './tracing-repository';
+const CREATE_CHARGE_MESSAGE_TRACE = 'Create Charge',
+  CAPTURE_CHARGE_MESSAGE_TRACE = 'Capture Charge',
+  CREATE_REFUND_MESSAGE_TRACE = 'Create Refund';
+
 module.exports = {
   createCharge: async function (stripeSecretKey, token, amount, currency, isCapture, description = 'Charge Description'){
     const stripe = require('stripe')(stripeSecretKey);
 
-    console.log('IS CAPT')
-    console.log(isCapture)
-    console.log(isCapture == 'true')
-    return await stripe.charges.create({
-      source: token,
-      amount: amount,
-      currency: currency,
-      description: description,
-      capture: isCapture == 'true'
-    });
+    return await captureAsyncFunc(CREATE_CHARGE_MESSAGE_TRACE, () => 
+      stripe.charges.create({
+        source: token,
+        amount: amount,
+        currency: currency,
+        description: description,
+        capture: isCapture == 'true'
+      })
+    );
   },
   captureCharge: async function (stripeSecretKey, charge){
     const stripe = require('stripe')(stripeSecretKey);
-    return await stripe.charges.capture(charge);
+    return await captureAsyncFunc(CAPTURE_CHARGE_MESSAGE_TRACE, () => stripe.charges.capture(charge));
   },
   createRefund: async function (stripeSecretKey, charge) {
     const stripe = require('stripe')(stripeSecretKey);
-    return await stripe.refunds.create({charge});
+    return await captureAsyncFunc(CREATE_REFUND_MESSAGE_TRACE, () => stripe.refunds.create({charge}));
   }
 };

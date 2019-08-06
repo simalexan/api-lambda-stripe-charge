@@ -1,8 +1,8 @@
 {
   "name": "api-lambda-stripe-charge",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "description": "",
-  "main": "index.js",
+  "main": "charge.js",
   "scripts": {
     "test": "jest --color",
     "prepack": "npm install --production",
@@ -21,6 +21,7 @@
     ]
   },
   "dependencies": {
+    "aws-xray-sdk": "^2.3.4",
     "stripe": "^7.3.0"
   },
   "devDependencies": {
