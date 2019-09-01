@@ -124,3 +124,12 @@ Outputs:
   SNSTopic:
     Value: !Ref SNSTopic
     Description: The SNS topic your Stripe Lambda is notifying to
+  CaptureCharge:
+    Value: !GetAtt CaptureStripeCharge.Arn
+    Description: The ARN for the CaptureStripeCharge Function
+  CreateCharge:
+    Value: !GetAtt CreateStripeCharge.Arn
+    Description: The ARN for the CreateStripeCharge Function
+  CreateRefund:
+    Value: !GetAtt CreateRefund.Arn
+    Description: The ARN for the CreateRefund Function
