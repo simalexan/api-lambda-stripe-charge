@@ -12,7 +12,7 @@ Parameters:
     Description: >
       This component assumes the Stripe Secret key needed to use the Stripe Charge API is stored as SecureStrings in SSM Parameter Store under the path defined by
       this parameter. See the component README for details.
-    AllowedPattern: ^[0-9a-zA-Z-][0-9a-zA-Z-\/]+
+    AllowedPattern: ^/[0-9a-zA-Z-][0-9a-zA-Z-\/]+
     ConstraintDescription: 'Must start with a slash and alphanumeric characters (exclude the starting slash)'
   EnableInstantCapture:
     Type: String
