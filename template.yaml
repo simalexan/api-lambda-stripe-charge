@@ -1,5 +1,12 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Runtime: nodejs10.x
+    Timeout: 10
+    Tracing: Active
+
 Parameters:
   CorsOrigin:
     Type: String
@@ -37,9 +44,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: charge.handler
-      Runtime: nodejs8.10
-      Timeout: 10
-      Tracing: Active
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt SNSTopic.TopicName
@@ -63,9 +67,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: capture.handler
-      Runtime: nodejs8.10
-      Timeout: 10
-      Tracing: Active
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt SNSTopic.TopicName
@@ -88,9 +89,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: refund.handler
-      Runtime: nodejs8.10
-      Timeout: 10
-      Tracing: Active
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt SNSTopic.TopicName
