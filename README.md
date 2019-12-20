@@ -22,13 +22,10 @@ aws ssm put-parameter --name /lambda-stripe-charge/stripe-secret-key --value YOU
 
 Will provide a video link on YouTube soon, as I will stream using this AWS App Repo template.
 
-### Latest Release - 4.4.0
+### Latest Release - 4.4.1
 
-A new release with a AWS X-Ray Instrumentation enabled!
+Changing to Node.js 10.x Runtime For Lambda
 
-#### Previous Release 4.3.0
+#### Previous Release 4.4.0
 
-A new release with a new feature to also do charge and capture of payments:
-
-- Added Active X-Ray Tracing for the API Gateway and the Lambdas CreateStripeCharge, CreateRefund and CaptureStripeCharge
-- Added Regional Endpoints for the API Gateway, which should improve latencies
+- Added Active X-Ray Tracing
