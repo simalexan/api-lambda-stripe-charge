@@ -6,10 +6,16 @@ const { captureAsyncFunc } = require('./tracing-repository'),
   CREATE_REFUND_MESSAGE_TRACE = 'Create Refund';
 
 module.exports = {
-  createCharge: async function (stripeSecretKey, token, amount, currency, isCapture, description = 'Charge Description'){
-    const stripe = require('stripe')(stripeSecretKey);
-
-    return await captureAsyncFunc(CREATE_CHARGE_MESSAGE_TRACE, () => 
+  createCharge: async function (stripeSecretKey, token, amount, currency, isCapture, description = 'Charge Description') {
+    const stripe = require('stripe')(stripeSecretKey, {
+      'apiVersion': (process.env.API_VERSION == "null") ? null : process.env.API_VERSION,
+      'maxNetworkRetries': process.env.MAX_NETWORK_RETRIES,
+      'httpAgent': null,
+      'timeout': process.env.TIMEOUT,
+      'host': process.env.HOST,
+      'port': process.env.PORT,
+      'telemetry': process.env.TELEMETRY});
+    return await captureAsyncFunc(CREATE_CHARGE_MESSAGE_TRACE, () =>
       stripe.charges.create({
         source: token,
         amount: amount,
@@ -19,12 +25,28 @@ module.exports = {
       })
     );
   },
-  captureCharge: async function (stripeSecretKey, charge){
-    const stripe = require('stripe')(stripeSecretKey);
+  captureCharge: async function (stripeSecretKey, charge) {
+    const stripe = require('stripe')(stripeSecretKey,
+      (process.env.API_VERSION == "null") ? null : process.env.API_VERSION,
+      process.env.MAX_NETWORK_RETRIES,
+      null,
+      process.env.TIMEOUT,
+      process.env.HOST,
+      process.env.PORT,
+      process.env.PROTOCOL,
+      process.env.TELEMETRY);
     return await captureAsyncFunc(CAPTURE_CHARGE_MESSAGE_TRACE, () => stripe.charges.capture(charge));
   },
   createRefund: async function (stripeSecretKey, charge) {
-    const stripe = require('stripe')(stripeSecretKey);
-    return await captureAsyncFunc(CREATE_REFUND_MESSAGE_TRACE, () => stripe.refunds.create({charge}));
+    const stripe = require('stripe')(stripeSecretKey,
+      (process.env.API_VERSION == "null") ? null : process.env.API_VERSION,
+      process.env.MAX_NETWORK_RETRIES,
+      null,
+      process.env.TIMEOUT,
+      process.env.HOST,
+      process.env.PORT,
+      process.env.PROTOCOL,
+      process.env.TELEMETRY);
+    return await captureAsyncFunc(CREATE_REFUND_MESSAGE_TRACE, () => stripe.refunds.create({ charge }));
   }
 };

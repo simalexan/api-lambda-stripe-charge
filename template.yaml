@@ -26,6 +26,32 @@ Parameters:
     AllowedValues: [true, false]
     Default: true
     Description: To immediatelly capture a payment upon charge, if true it means on charge you collect the amount, if false, you need to do a capture.
+  ApiVersion:
+    Type: String
+    Default: "null"
+    Description: Stripe API version to be used. If not set the account's default version will be used.
+  MaxNetworkRetries:
+    Type: Number
+    Default: 0
+    Description: The amount of times a request should be retried.
+  Timeout:
+    Type: Number
+    Default: 80000
+    Description: Maximum time each request can take in ms.
+  Host:
+    Type: String
+    Default: "api.stripe.com"
+    Description: Host that requests are made to.
+  Port:
+    Type: String
+    Default: 443
+    Description: Port that requests are made to.
+  Telemetry:
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+    Description: Allow Stripe to send latency telemetry.
+
 Conditions:
   ShouldEnableCapture: !Equals [true, !Ref EnableInstantCapture]
 Resources:
@@ -56,6 +82,12 @@ Resources:
           SSM_PARAMETER_PATH: !Ref SSMParameterPath
           TOPIC_ARN: !Ref SNSTopic
           IS_CAPTURE: !Ref EnableInstantCapture
+          API_VERSION: !Ref ApiVersion
+          MAX_NETWORK_RETRIES: !Ref MaxNetworkRetries
+          TIMEOUT: !Ref Timeout
+          HOST: !Ref Host
+          PORT: !Ref Port
+          TELEMETRY: !Ref Telemetry
       Events:
         Api:
           Type: Api
@@ -78,6 +110,12 @@ Resources:
           CORS_ORIGIN: !Ref CorsOrigin
           SSM_PARAMETER_PATH: !Ref SSMParameterPath
           TOPIC_ARN: !Ref SNSTopic
+          API_VERSION: !Ref ApiVersion
+          MAX_NETWORK_RETRIES: !Ref MaxNetworkRetries
+          TIMEOUT: !Ref Timeout
+          HOST: !Ref Host
+          PORT: !Ref Port
+          TELEMETRY: !Ref Telemetry
       Events:
         Api:
           Type: Api
@@ -100,6 +138,12 @@ Resources:
           CORS_ORIGIN: !Ref CorsOrigin
           SSM_PARAMETER_PATH: !Ref SSMParameterPath
           TOPIC_ARN: !Ref SNSTopic
+          API_VERSION: !Ref ApiVersion
+          MAX_NETWORK_RETRIES: !Ref MaxNetworkRetries
+          TIMEOUT: !Ref Timeout
+          HOST: !Ref Host
+          PORT: !Ref Port
+          TELEMETRY: !Ref Telemetry
       Events:
         Api:
           Type: Api
